@@ -1,19 +1,15 @@
 package com.calculadoracalorias.calculadoracalorias.controllers;
 
-import com.calculadoracalorias.calculadoracalorias.dtos.InformacionCaloriasDto;
-import com.calculadoracalorias.calculadoracalorias.dtos.ListadoInformacionDto;
-import com.calculadoracalorias.calculadoracalorias.dtos.ListadoPlatosDto;
-import com.calculadoracalorias.calculadoracalorias.dtos.PlatoDto;
+import com.calculadoracalorias.calculadoracalorias.dtos.*;
 import com.calculadoracalorias.calculadoracalorias.dtos.mappers.InformacionCaloriasDtoMapper;
+import com.calculadoracalorias.calculadoracalorias.dtos.mappers.ListadoInformacionDtoMapper;
 import com.calculadoracalorias.calculadoracalorias.dtos.mappers.ListadoPlatosDtoMapper;
 import com.calculadoracalorias.calculadoracalorias.dtos.mappers.PlatoDtoMapper;
 import com.calculadoracalorias.calculadoracalorias.entities.InformacionCalorias;
+import com.calculadoracalorias.calculadoracalorias.exceptionsHandlers.IngredientNotFound;
 import com.calculadoracalorias.calculadoracalorias.services.PlatoService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -43,8 +39,16 @@ public class PlatoController
     {
         ArrayList<InformacionCalorias> info = platoService.getOInformacionCaloriasListado(ListadoPlatosDtoMapper.mapToListadoPlatos(plato));
 
-        ListadoInformacionDto resp = new ListadoInformacionDto(info);
+        ListadoInformacionDto resp = ListadoInformacionDtoMapper.mapToDto(info);
 
         return ResponseEntity.ok(resp);
+    }
+
+    @ExceptionHandler(IngredientNotFound.class)
+    public ResponseEntity<?> handleException(IngredientNotFound e)
+    {
+        ErrorDto errorDto = new ErrorDto("Ingrediente error", e.getMessage());
+
+        return ResponseEntity.badRequest().body(errorDto);
     }
 }

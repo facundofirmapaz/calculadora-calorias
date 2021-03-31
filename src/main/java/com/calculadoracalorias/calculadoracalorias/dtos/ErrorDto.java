@@ -3,11 +3,10 @@ package com.calculadoracalorias.calculadoracalorias.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.ArrayList;
-
 @Data
 @AllArgsConstructor
-public class ListadoInformacionDto
+public class ErrorDto
 {
-    private ArrayList<InformacionCaloriasDto> informacionCaloriasDtos;
+    private String name;
+    private String description;
 }

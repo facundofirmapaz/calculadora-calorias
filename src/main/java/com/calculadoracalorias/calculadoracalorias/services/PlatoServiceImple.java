@@ -1,6 +1,7 @@
 package com.calculadoracalorias.calculadoracalorias.services;
 
 import com.calculadoracalorias.calculadoracalorias.entities.*;
+import com.calculadoracalorias.calculadoracalorias.exceptionsHandlers.IngredientNotFound;
 import com.calculadoracalorias.calculadoracalorias.repositories.PlatoRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,9 @@
 package com.calculadoracalorias.calculadoracalorias.repositories;
 
 import com.calculadoracalorias.calculadoracalorias.entities.Caloria;
+import com.calculadoracalorias.calculadoracalorias.exceptionsHandlers.IngredientNotFound;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 @Repository
 public class PlatoRepositoryImple implements PlatoRepository
 {
+    @SneakyThrows
     @Override
     public Caloria getCaloriaByNombreIngrediente(String nombreIngrediente)
     {
@@ -22,8 +25,18 @@ public class PlatoRepositoryImple implements PlatoRepository
 
         if (calorias != null)
         {
-            resultado = calorias.stream().filter(x -> x.getName().equals(nombreIngrediente)).findFirst().get();
+            for (Caloria x : calorias)
+            {
+                if (x.getName().equals(nombreIngrediente))
+                {
+                    resultado = x;
+                    break;
+                }
+            }
         }
+
+        if(resultado == null)
+            throw new IngredientNotFound("Ingrediente no encontrado: " + nombreIngrediente);
 
         return resultado;
     }
